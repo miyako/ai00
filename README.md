@@ -1,2 +1,2 @@
-# ai00_server
+# ai00
 Local inference engine
