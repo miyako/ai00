@@ -95,5 +95,5 @@ The API is compatibile with [Open AI](https://platform.openai.com/docs/api-refer
 |Chat|`/v1/chat/completions`|✅|
 |Images|`/v1/images/generations`||
 |Moderations|`/v1/moderations`||
-|Embeddings|`/v1/embeddings`|✅|
+|Embeddings|`/v1/embeddings`||
 |Files|`/v1/files`||
