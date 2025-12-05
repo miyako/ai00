@@ -44,23 +44,54 @@ Unless the server is already running (in which case the costructor does nothing)
 Now you can test the server:
 
 ```
-curl -X POST http://127.0.0.1:8080/api/oai/v1/embeds \
-     -H "Content-Type: application/json" \
-     -d '{"input":"The Eiffel Tower is located in the city of","max_tokens":510,"prefix":"query:"}'
+curl -X GET http://127.0.0.1:8080/api/oai/v1/models
 ```
 
-Or, use AI Kit:
-
-```4d
-var $AIClient : cs.AIKit.OpenAI
-$AIClient:=cs.AIKit.OpenAI.new()
-$AIClient.baseURL:="http://127.0.0.1:8080/api/oai/v1"
-
-var $text : Text
-$text:="The quick brown fox jumps over the lazy dog."
-
-var $responseEmbeddings : cs.AIKit.OpenAIEmbeddingsResult
-$responseEmbeddings:=$AIClient.embeddings.create($text)
+```
+curl -X 'POST' \
+  'http://127.0.0.1:8080/api/oai/v1/chat/completions' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "max_tokens": 1000,
+  "messages": [
+    {
+      "content": "Hi!",
+      "role": "user"
+    },
+    {
+      "content": "Hello, I am your AI assistant. If you have any questions or instructions, please let me know!",
+      "role": "assistant"
+    },
+    {
+      "content": "Tell me about water.",
+      "role": "user"
+    }
+  ],
+  "names": {
+    "assistant": "Assistant",
+    "user": "User"
+  },
+  "sampler": {
+    "frequency_penalty": 0.3,
+    "penalty_decay": 0.99654026,
+    "presence_penalty": 0.3,
+    "temperature": 1,
+    "top_k": 128,
+    "top_p": 0.5,
+    "type": "Nucleus"
+  },
+  "state": "00000000-0000-0000-0000-000000000000",
+  "stop": [
+    "\n\nUser:"
+  ],
+  "stream": false,
+  "template": {
+    "prefix": "{assistant}:",
+    "record": "{role}: {content}",
+    "sep": "\n\n"
+  }
+}'
 ```
 
 The full list of endpoints are listsed at `http://127.0.0.1:8080/api-docs/`.

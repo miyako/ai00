@@ -8,6 +8,7 @@ property quant_type : Text
 property precision : Text
 property web_path : Text
 property adapter : Integer
+property tokenizer_path : Text
 
 property _configFile : 4D:C1709.File
 property _configTemplate : Text
@@ -44,6 +45,10 @@ Function get path() : Text
 Function get web_path() : Text
 	
 	return "assets/www/index.zip"
+	
+Function get tokenizer_path() : Text
+	
+	return "assets/tokenizer/rwkv_vocab.json"
 	
 Function get force_pass() : Text
 	

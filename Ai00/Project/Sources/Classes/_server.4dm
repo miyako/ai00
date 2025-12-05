@@ -56,6 +56,15 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	If (Not:C34($wwwFolder.file($indexZipFile.fullName).exists))
 		$indexZipFile.copyTo($wwwFolder)
 	End if 
+	var $tokenizerFolder : 4D:C1709.Folder
+	$tokenizerFolder:=$assetsFolder.folder("tokenizer")
+	$tokenizerFolder.create()
+	
+	var $tokenizerFile : 4D:C1709.File
+	$tokenizerFile:=File:C1566("/RESOURCES/tokenizer/rwkv_vocab.json")
+	If (Not:C34($tokenizerFolder.file($tokenizerFile.fullName).exists))
+		$tokenizerFile.copyTo($tokenizerFolder)
+	End if 
 	
 	var $configFile : 4D:C1709.File
 	$configFile:=$assetsFolder.file("config.toml")
