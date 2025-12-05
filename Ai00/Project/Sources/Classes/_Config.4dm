@@ -7,7 +7,6 @@ property port : Integer
 property quant_type : Text
 property precision : Text
 property web_path : Text
-property _wwwFile : 4D:C1709.File
 
 property _configFile : 4D:C1709.File
 property _configTemplate : Text
@@ -24,11 +23,13 @@ Class constructor
 	This:C1470.port:=8080
 	This:C1470.quant_type:="Int8"
 	This:C1470.precision:="Fp16"
-	This:C1470._wwwFile:=File:C1566("/RESOURCES/www/index.zip")
-	This:C1470.web_path:=File:C1566(This:C1470._wwwFile.platformPath; fk platform path:K87:2).path
 	
 	This:C1470._configFile:=File:C1566("/RESOURCES/Config.toml")
 	This:C1470._configTemplate:=This:C1470._configFile.getText()
+	
+Function get web_path() : Text
+	
+	return "assets/www/index.zip"
 	
 Function get quant() : Integer
 	

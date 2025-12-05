@@ -51,9 +51,12 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	var $wwwFolder : 4D:C1709.Folder
 	$wwwFolder:=$assetsFolder.folder("www")
 	$wwwFolder.create()
-	If (Not:C34($wwwFolder.file($config._wwwFile.fullName).exists))
-		$config._wwwFile.copyTo($wwwFolder)
+	var $indexZipFile : 4D:C1709.File
+	$indexZipFile:=File:C1566("/RESOURCES/www/index.zip")
+	If (Not:C34($wwwFolder.file($indexZipFile.fullName).exists))
+		$indexZipFile.copyTo($wwwFolder)
 	End if 
+	
 	var $configFile : 4D:C1709.File
 	$configFile:=$assetsFolder.file("config.toml")
 	$configFile.setText($config.getText())
@@ -68,7 +71,7 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 		Case of 
 			: (["config"; "ip"; "port"; \
 				"max_batch"; "embed_device"; \
-				"quant_type"; "precision"; "path"; "name"].includes($arg.key))
+				"quant"; "quant_type"; "precision"; "path"; "name"].includes($arg.key))
 				continue
 		End case 
 		$valueType:=Value type:C1509($arg.value)
@@ -86,6 +89,8 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	End for each 
 	
 	This:C1470.controller.currentDirectory:=$currentDirectory
+	
+	SET TEXT TO PASTEBOARD:C523($command)
 	
 	return This:C1470.controller.execute($command; $isStream ? $option.model : Null:C1517; $option.data).worker
 	

@@ -1,9 +1,9 @@
 Class constructor($port : Integer; $file : 4D:C1709.File; $URL : Text; $options : Object; $formula : 4D:C1709.Function)
 	
-	var $llama : cs:C1710._worker
-	$llama:=cs:C1710._worker.new()
+	var $Ai00 : cs:C1710._worker
+	$Ai00:=cs:C1710._worker.new()
 	
-	If (Not:C34($llama.isRunning()))
+	If (Not:C34($Ai00.isRunning()))
 		
 		If (Value type:C1509($file)#Is object:K8:27) || (Not:C34(OB Instance of:C1731($file; 4D:C1709.File))) || ($URL="")
 			$modelsFolder:=Folder:C1567(fk home folder:K87:24).folder(".Ai00")
@@ -27,6 +27,6 @@ Function _Start($port : Integer; $file : 4D:C1709.File; $URL : Text; $options : 
 	
 Function terminate()
 	
-	var $llama : cs:C1710._worker
-	$llama:=cs:C1710._worker.new()
-	$llama.terminate()
+	var $Ai00 : cs:C1710._worker
+	$Ai00:=cs:C1710._worker.new()
+	$Ai00.terminate()
