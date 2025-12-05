@@ -75,7 +75,7 @@ $Ai00.terminate()
 
 #### Models
 
-Models in .pth format can be downloaded from [huggingface.co] (https://huggingface.co/BlinkDL/rwkv7-g1/resolve/main/rwkv7-g1a-0.4b-20250905-ctx4096.pth) or [modelscope.cn](https://modelscope.cn/models/RWKV/rwkv7-g1/resolve/master/rwkv7-g1a-0.4b-20250905-ctx4096.pth).
+Models in .pth format can be downloaded from [huggingface.co](https://huggingface.co/BlinkDL/rwkv7-g1/resolve/main/rwkv7-g1a-0.4b-20250905-ctx4096.pth) or [modelscope.cn](https://modelscope.cn/models/RWKV/rwkv7-g1/resolve/master/rwkv7-g1a-0.4b-20250905-ctx4096.pth).
 
 Ai00 can't use a .pth model directly. You can use python to [convert](https://github.com/Ai00-X/ai00_server?tab=readme-ov-file#convert-the-model) the model from .pth to .st.
 
