@@ -13,8 +13,8 @@ property _configTemplate : Text
 
 Class constructor
 	
-	This:C1470.embed_device:="cpu"
-	This:C1470.max_batch:=8
+	This:C1470.embed_device:="Cpu"
+	This:C1470.max_batch:=1
 	var $modelsFolder : 4D:C1709.Folder
 	$modelsFolder:=Folder:C1567(fk home folder:K87:24).folder(".Ai00")
 	This:C1470.name:="RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st"
