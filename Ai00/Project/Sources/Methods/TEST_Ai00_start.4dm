@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true}
 var $Ai00 : cs:C1710.Ai00
 
-If (False:C215)
+If (True:C214)
 	$Ai00:=cs:C1710.Ai00.new()  //default
 Else 
 	var $modelsFolder : 4D:C1709.Folder
