@@ -113,3 +113,16 @@ Attention, or self-attention, allows the model to weigh the relevance of every w
 To calculate attention, the model must compare every token to every other token. This means the memory required increases by 4x if you double the length of the prompt and 9x of you triple the length. Running very long conversations on standard Transformers (like Llama 3 or Mistral) is extremely memory-heavy.
 
 Ai00 runs the RWKV model, which uses a "Linear Attention" approach. It trains like a Transformer (fast/parallel) but runs like an RNN (sequential). The amount of RAM is fixed regardless of whether the conversation is 10 words long or 100,000 words long. 
+
+##### LLaMA (Transformer)
+- Uses self-attention
+- Needs to store a KV cache for every token
+- Memory grows with context
+
+##### RWKV (Recurrent Transformer Hybrid)
+
+- No attention at inference
+- Keeps only a small hidden state
+- Memory does not grow with context
+- Good for text-generation with long memory
+- Not a good embedding model
