@@ -6,6 +6,8 @@ property ip : Text
 property port : Integer
 property quant_type : Text
 property precision : Text
+property web_path : Text
+property _wwwFile : 4D:C1709.File
 
 property _configFile : 4D:C1709.File
 property _configTemplate : Text
@@ -14,17 +16,30 @@ Class constructor
 	
 	This:C1470.embed_device:="cpu"
 	This:C1470.max_batch:=8
-	This:C1470.name:="RWKV-x070-World-0.4B-v2.9-20250107-ctx4096"
 	var $modelsFolder : 4D:C1709.Folder
 	$modelsFolder:=Folder:C1567(fk home folder:K87:24).folder(".Ai00")
+	This:C1470.name:="RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st"
 	This:C1470.path:=$modelsFolder.file(This:C1470.name).path
 	This:C1470.ip:="0.0.0.0"
 	This:C1470.port:=8080
 	This:C1470.quant_type:="Int8"
 	This:C1470.precision:="Fp16"
+	This:C1470._wwwFile:=File:C1566("/RESOURCES/www/index.zip")
+	This:C1470.web_path:=File:C1566(This:C1470._wwwFile.platformPath; fk platform path:K87:2).path
 	
 	This:C1470._configFile:=File:C1566("/RESOURCES/Config.toml")
 	This:C1470._configTemplate:=This:C1470._configFile.getText()
+	
+Function get quant() : Integer
+	
+	Case of 
+		: (This:C1470.quant_type="NF4")
+			return 2
+		: (This:C1470.quant_type="Int8")
+			return 1
+		Else 
+			return 0
+	End case 
 	
 Function getText() : Text
 	

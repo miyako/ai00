@@ -15,7 +15,7 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	Case of 
 		: (Value type:C1509($option.model)=Is object:K8:27) && (OB Instance of:C1731($option.model; 4D:C1709.File)) && ($option.model.exists)
 			$config.path:=This:C1470.expand($option.model).path
-			$config.name:=$option.model.name
+			$config.name:=$option.model.fullName
 	End case 
 	
 	If (Value type:C1509($option.ip)=Is text:K8:3)
@@ -42,8 +42,20 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 		$config.max_batch:=$option.max_batch
 	End if 
 	
+	var $currentDirectory : 4D:C1709.Folder
+	$currentDirectory:=Folder:C1567(fk home folder:K87:24).folder(".Ai00")
+	$currentDirectory.create()
+	var $assetsFolder : 4D:C1709.Folder
+	$assetsFolder:=$currentDirectory.folder("assets")
+	$assetsFolder.create()
+	var $wwwFolder : 4D:C1709.Folder
+	$wwwFolder:=$assetsFolder.folder("www")
+	$wwwFolder.create()
+	If (Not:C34($wwwFolder.file($config._wwwFile.fullName).exists))
+		$config._wwwFile.copyTo($wwwFolder)
+	End if 
 	var $configFile : 4D:C1709.File
-	$configFile:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+".toml")
+	$configFile:=$assetsFolder.file("config.toml")
 	$configFile.setText($config.getText())
 	
 	$command+=(" --config "+This:C1470.escape($configFile.path)+" ")
@@ -72,6 +84,10 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 				//
 		End case 
 	End for each 
+	
+	This:C1470.controller.currentDirectory:=$currentDirectory
+	
+	//SET TEXT TO PASTEBOARD($command)
 	
 	return This:C1470.controller.execute($command; $isStream ? $option.model : Null:C1517; $option.data).worker
 	
