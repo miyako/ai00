@@ -81,6 +81,10 @@ Ai00 can't use a .pth model directly. You can use python to [convert](https://gi
 
 You can also use the `converter` tool in `/RESOURCES/`. 
 
+```
+converter --input model.pth --output model.st
+```
+
 #### AI Kit compatibility
 
 The API is compatibile with [Open AI](https://platform.openai.com/docs/api-reference/embeddings). 
