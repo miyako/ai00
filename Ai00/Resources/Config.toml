@@ -1,0 +1,27 @@
+[model]
+embed_device = "$4dtext($1.embed_device)"                                   # Device to put the embed tensor ("Cpu" or "Gpu").
+max_batch = $4dtext($1.max_batch)                                          # The maximum batches that are cached on GPU.
+name = "$4dtext($1.name)" # Name of the model.
+path = "$4dtext($1.path)"                                 # Path to the folder containing all models.
+precision = "$4dtext($1.precision)"                                     # Precision for intermediate tensors ("Fp16" or "Fp32"). "Fp32" yields better outputs but slower.
+quant = 0                                              # Layers to be quantized.
+quant_type = "$4dtext($1.quant_type)"                                    # Quantization type ("Int8" or "NF4").
+stop = ["\n\n"]                                        # Additional stop words in generation.
+token_chunk_size = 256                                 # Size of token chunk that is inferred at once. For high end GPUs, this could be 64 to 1024 (faster).
+
+[bnf]
+enable_bytes_cache = true   # Enable the cache that accelerates the expansion of certain short schemas.
+start_nonterminal = "start" # The initial nonterminal of the BNF schemas.
+
+[adapter]
+Auto = {} # Choose the best GPU.
+# Manual = 0 # Manually specify which GPU to use.
+
+[listen]
+acme = false
+domain = "local"
+ip = "$4dtext($1.ip)"   # Use IpV4.
+force_pass = true
+port = $4dtext($1.port)
+slot = "permisionkey"
+tls = false
