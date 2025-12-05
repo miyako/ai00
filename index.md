@@ -97,3 +97,19 @@ The API is compatibile with [Open AI](https://platform.openai.com/docs/api-refer
 |Moderations|`/v1/moderations`||
 |Embeddings|`/v1/embeddings`||
 |Files|`/v1/files`||
+
+### Why Ai00
+
+Ai00 is designed for RWKV models, which is different from LLaMA and has distinct strengths.
+
+The groundbreaking paper "Attention is All You Need" (2017) by researchers at Google enabled parallel processing, a key differentiator from prior sequential models like RNNs. 
+
+Before 2017, AI processed text sequentially from start to end. The architecture had a major flaw, that it couldn't be parallelised since you can't process Word 3 until you finished processing Word 2.
+
+The Transformer architecture allowed the computer to look at an entire sentence at once, rather than one word at a time. This unlocked the ability to use massive GPU clusters to train on the entire internet, giving birth to GPT, BERT, and Claude.
+
+Attention, or self-attention, allows the model to weigh the relevance of every word against every other word in a sentence, regardless of how far apart they are. 
+
+To calculate attention, the model must compare every token to every other token. This means the memory required increases by 4x if you double the length of the prompt and 9x of you triple the length. Running very long conversations on standard Transformers (like Llama 3 or Mistral) is extremely memory-heavy.
+
+Ai00 runs the RWKV model, which uses a "Linear Attention" approach. It trains like a Transformer (fast/parallel) but runs like an RNN (sequential). The amount of RAM is fixed regardless of whether the conversation is 10 words long or 100,000 words long. 
