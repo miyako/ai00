@@ -129,7 +129,7 @@ The API is compatibile with [Open AI](https://platform.openai.com/docs/api-refer
 |Embeddings|`/v1/embeddings`||
 |Files|`/v1/files`||
 
-### Why Ai00
+#### Why Ai00
 
 Ai00 is designed for RWKV models, which is different from LLaMA and has distinct strengths.
 
