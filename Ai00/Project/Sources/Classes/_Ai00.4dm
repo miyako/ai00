@@ -6,7 +6,16 @@ Class constructor($controller : 4D:C1709.Class)
 		$controller:=cs:C1710._Ai00_Controller
 	End if 
 	
-	Super:C1705("ai00-server"; $controller)
+	var $command : Text
+	
+	Case of 
+		: (Is macOS:C1572) && (Get system info:C1571.processor#"@Apple@")
+			$command:="ai00-server-x86_64"
+		Else 
+			$command:="ai00-server"
+	End case 
+	
+	Super:C1705($command; $controller)
 	
 Function get worker() : 4D:C1709.SystemWorker
 	
