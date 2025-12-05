@@ -3,7 +3,7 @@ Class constructor($port : Integer; $file : 4D:C1709.File; $URL : Text; $options 
 	var $Ai00 : cs:C1710._worker
 	$Ai00:=cs:C1710._worker.new()
 	
-	If (Not:C34($Ai00.isRunning()))
+	If (Not:C34($Ai00.isRunning($port)))
 		
 		If (Value type:C1509($file)#Is object:K8:27) || (Not:C34(OB Instance of:C1731($file; 4D:C1709.File))) || ($URL="")
 			$modelsFolder:=Folder:C1567(fk home folder:K87:24).folder(".Ai00")
@@ -18,7 +18,7 @@ Class constructor($port : Integer; $file : 4D:C1709.File; $URL : Text; $options 
 			$port:=8080
 		End if 
 		
-		CALL WORKER:C1389("Ai00_Start"; This:C1470._Start; $port; $file; $URL; $options; $formula)
+		CALL WORKER:C1389(OB Class:C1730(This:C1470).name; This:C1470._Start; $port; $file; $URL; $options; $formula)
 		
 	End if 
 	
