@@ -44,7 +44,7 @@ Unless the server is already running (in which case the costructor does nothing)
 Now you can test the server:
 
 ```
-curl -X POST http://127.0.0.1:8080/api/oai/v1/embeddings \
+curl -X POST http://127.0.0.1:8080/api/oai/v1/embeds \
      -H "Content-Type: application/json" \
      -d '{"input":"The quick brown fox jumps over the lazy dog."}'
 ```
