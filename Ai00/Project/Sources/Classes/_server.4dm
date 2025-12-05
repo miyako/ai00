@@ -14,8 +14,7 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	
 	Case of 
 		: (Value type:C1509($option.model)=Is object:K8:27) && (OB Instance of:C1731($option.model; 4D:C1709.File)) && ($option.model.exists)
-			$config.path:=This:C1470.expand($option.model).path
-			$config.name:=$option.model.fullName
+			$config.setModel($option.model)
 	End case 
 	
 	If (Value type:C1509($option.ip)=Is text:K8:3)
@@ -42,6 +41,7 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 		$config.max_batch:=$option.max_batch
 	End if 
 	
+	//setup home directory
 	var $currentDirectory : 4D:C1709.Folder
 	$currentDirectory:=Folder:C1567(fk home folder:K87:24).folder(".Ai00")
 	$currentDirectory.create()
@@ -89,6 +89,8 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	End for each 
 	
 	This:C1470.controller.currentDirectory:=$currentDirectory
+	
+	SET TEXT TO PASTEBOARD:C523($command)
 	
 	return This:C1470.controller.execute($command; $isStream ? $option.model : Null:C1517; $option.data).worker
 	

@@ -9,7 +9,7 @@ Function start($option : Object)
 	End if 
 	
 	var $signal : 4D:C1709.Signal
-	$signal:=New signal:C1641("Ai00")
+	$signal:=New signal:C1641(".Ai00")
 	
 	CALL WORKER:C1389($signal.description; This:C1470._start; $option; $signal)
 	

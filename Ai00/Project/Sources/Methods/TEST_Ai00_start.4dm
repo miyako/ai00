@@ -14,6 +14,7 @@ Else
 	var $port : Integer
 	$port:=8080
 	$Ai00:=cs:C1710.Ai00.new($port; $file; $URL; {\
+		max_batch: 1; \
 		quant_type: "Int8"; \
 		precision: "Fp32"}; Formula:C1597(ALERT:C41(This:C1470.file.name+($1.success ? " started!" : " did not start..."))))
 End if 
