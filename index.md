@@ -18,10 +18,10 @@ layout: default
 Instantiate `cs.Ai00.Ai00` in your *On Startup* database method:
 
 ```4d
-var $Ai00 : cs.Ai00
+var $Ai00 : cs.Ai00.Ai00
 
 If (False)
-    $Ai00:=cs.Ai00.new()  //default
+    $Ai00:=cs.Ai00.Ai00.new()  //default
 Else 
     var $modelsFolder : 4D.Folder
     $modelsFolder:=Folder(fk home folder).folder(".Ai00")
@@ -30,7 +30,7 @@ Else
     $URL:="https://modelscope.cn/models/shoumenchougou/RWKV-7-World-ST/resolve/master/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st"
     var $port : Integer
     $port:=8080
-    $Ai00:=cs.Ai00.new($port; $file; $URL; {\
+    $Ai00:=cs.Ai00.Ai00.new($port; $file; $URL; {\
     quant_type: "Int8"; \
     precision: "Fp16"}; Formula(ALERT(This.file.name+($1.success ? " started!" : " did not start..."))))
 End if 
