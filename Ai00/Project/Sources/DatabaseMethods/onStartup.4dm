@@ -1,4 +1,3 @@
-//%attributes = {"invisible":true}
 var $Ai00 : cs:C1710.Ai00
 
 If (False:C215)
@@ -13,8 +12,18 @@ Else
 	//$URL:="https://github.com/miyako/ai00/releases/download/models/rwkv7-g1a-0.4b-20250905-ctx4096.st"
 	var $port : Integer
 	$port:=8080
+	var $event : cs:C1710.Ai00Event
+	$event:=cs:C1710.Ai00Event.new()
+/*
+Function onError($params : Object; $error : cs._error)
+Function onSuccess($params : Object)
+*/
+	$event.onError:=Formula:C1597(ALERT:C41($2.message))
+	$event.onSuccess:=Formula:C1597(ALERT:C41(This:C1470.file.name+" loaded!"))
+	
+	
 	$Ai00:=cs:C1710.Ai00.new($port; $file; $URL; {\
 		max_batch: 1; \
 		quant_type: "Int8"; \
-		precision: "Fp32"}; Formula:C1597(ALERT:C41(This:C1470.file.name+($1.success ? " started!" : " did not start..."))))
+		precision: "Fp32"}; $event)
 End if 
