@@ -1,3 +1,8 @@
+property port : Integer
+property onData : 4D:C1709.Function
+property onDataError : 4D:C1709.Function
+property onTerminate : 4D:C1709.Function
+
 Class extends _CLI
 
 Class constructor($controller : 4D:C1709.Class)
@@ -9,13 +14,22 @@ Class constructor($controller : 4D:C1709.Class)
 	var $command : Text
 	
 	Case of 
-		: (Is macOS:C1572) && (Get system info:C1571.processor#"@Apple@")
+		: (Is macOS:C1572) && (System info:C1571.processor#"@Apple@")
 			$command:="ai00-server-x86_64"
 		Else 
 			$command:="ai00-server"
 	End case 
 	
 	Super:C1705($command; $controller)
+	
+Function bind($option : Object; $properties : Collection) : cs:C1710._CTranslate2
+	
+	var $property : Text
+	For each ($property; $properties)
+		This:C1470[$property]:=$option[$property]
+	End for each 
+	
+	return This:C1470
 	
 Function get worker() : 4D:C1709.SystemWorker
 	
