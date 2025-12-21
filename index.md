@@ -18,7 +18,7 @@ layout: default
 Instantiate `cs.Ai00.Ai00` in your *On Startup* database method:
 
 ```4d
-var $Ai00 : cs.Ai00.Ai00
+var $Ai00 : cs.Ai00
 
 If (False)
     $Ai00:=cs.Ai00.Ai00.new()  //default
@@ -39,23 +39,19 @@ Else
         Function onData($request : 4D.HTTPRequest; $event : Object)
         Function onResponse($request : 4D.HTTPRequest; $event : Object)
         Function onTerminate($worker : 4D.SystemWorker; $params : Object)
-        Function onStdOut($worker : 4D.SystemWorker; $params : Object)
-        Function onStdErr($worker : 4D.SystemWorker; $params : Object)
     */
     
     $event.onError:=Formula(ALERT($2.message))
     $event.onSuccess:=Formula(ALERT($2.models.extract("name").join(",")+" loaded!"))
     $event.onData:=Formula(LOG EVENT(Into 4D debug message; "download:"+String((This.range.end/This.range.length)*100; "###.00%")))
     $event.onResponse:=Formula(LOG EVENT(Into 4D debug message; "download complete"))
-    $event.onStdOut:=Formula(LOG EVENT(Into 4D debug message; "out:"+$2.data))
-    $event.onStdErr:=Formula(LOG EVENT(Into 4D debug message; "err:"+$2.data))
     $event.onTerminate:=Formula(LOG EVENT(Into 4D debug message; (["process"; $1.pid; "terminated!"].join(" "))))
     
     $Ai00:=cs.Ai00.Ai00.new($port; $file; $URL; {\
     max_batch: 1; \
     quant_type: "Int8"; \
     precision: "Fp32"}; $event)
-End if 
+End if  
 ```
 
 Unless the server is already running (in which case the costructor does nothing), the following procedure runs in the background:
