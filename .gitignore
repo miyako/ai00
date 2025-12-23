@@ -1,4 +1,5 @@
 Ai00/userPreferences.*
 Ai00/Data/*
-Ai00/Project/DerivedData/formAttributes.json
-Ai00/Project/DerivedData/methodAttributes.json
+Ai00/Project/DerivedData/*
+Ai00/Resources/en.lproj/syntaxEN.json
+Ai00/Libraries/lib4d-arm64.dylib
