@@ -18,7 +18,7 @@ Class constructor
 	
 	This:C1470.embed_device:="Cpu"
 	This:C1470.max_batch:=8
-	This:C1470.ip:="0.0.0.0"
+	This:C1470.ip:="127.0.0.1"
 	This:C1470.port:=8080
 	This:C1470.quant_type:="Int8"
 	This:C1470.precision:="Fp16"

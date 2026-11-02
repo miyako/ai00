@@ -55,18 +55,22 @@ Function start($option : Object) : 4D:C1709.SystemWorker
 	$wwwFolder.create()
 	var $indexZipFile : 4D:C1709.File
 	$indexZipFile:=File:C1566("/RESOURCES/www/index.zip")
-	If (Not:C34($wwwFolder.file($indexZipFile.fullName).exists))
-		$indexZipFile.copyTo($wwwFolder)
-	End if 
+	// 4 = fk overwrite; refresh managed assets after component upgrades.
+	$indexZipFile.copyTo($wwwFolder; 4)
 	var $tokenizerFolder : 4D:C1709.Folder
 	$tokenizerFolder:=$assetsFolder.folder("tokenizer")
 	$tokenizerFolder.create()
 	
 	var $tokenizerFile : 4D:C1709.File
 	$tokenizerFile:=File:C1566("/RESOURCES/tokenizer/rwkv_vocab.json")
-	If (Not:C34($tokenizerFolder.file($tokenizerFile.fullName).exists))
-		$tokenizerFile.copyTo($tokenizerFolder)
-	End if 
+	$tokenizerFile.copyTo($tokenizerFolder; 4)
+
+	If (Is Windows:C1573)
+		var $ortFolder : 4D:C1709.Folder
+		$ortFolder:=$assetsFolder.folder("ort")
+		$ortFolder.create()
+		File:C1566("/RESOURCES/ort/onnxruntime.dll").copyTo($ortFolder; 4)
+	End if
 	
 	var $configFile : 4D:C1709.File
 	$configFile:=$assetsFolder.file("config.toml")

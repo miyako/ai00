@@ -3,3 +3,12 @@ Ai00/Data/*
 Ai00/Project/DerivedData/*
 Ai00/Resources/en.lproj/syntaxEN.json
 Ai00/Libraries/lib4d-arm64.dylib
+.build/
+dist/
+__pycache__/
+Ai00/Resources/bin/macOS/ai00-server
+Ai00/Resources/bin/macOS/ai00-server-x86_64
+Ai00/Resources/bin/Windows/ai00-server.exe
+Ai00/Resources/ort/
+Ai00/Resources/upstream/
+Ai00/Components/
