@@ -144,7 +144,8 @@ class SourceBuildTests(unittest.TestCase):
         self.assertEqual(workflow.count('--resources "$PRODUCT_PATH/Resources"'), 2)
 
     def test_pages_uses_readme(self):
-        self.assertIn("{% include_relative README.md %}", (ROOT / "index.md").read_text())
+        self.assertIn("{% include_relative README.md %}", (ROOT / "guide.md").read_text())
+        self.assertIn("'/guide.html'", (ROOT / "index.md").read_text())
 
     def test_publish_versions_clean_checkout_before_staging_resources(self):
         workflow = (ROOT / ".github/workflows/publish.yml").read_text()

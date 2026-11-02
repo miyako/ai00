@@ -8,8 +8,8 @@ plugins_dir: _plugins
 baseurl: /ai00
 
 title: "Ai00"
-description: "Use Ai00 from 4D"
-logo: "/assets/logo.png"   # optional
+description: "Local RWKV inference on Mac and Windows, connected to your 4D application."
+logo: "/assets/ai00.png"
 show_downloads: true       # controls the download links in header
 github:
   is_user_page: true
