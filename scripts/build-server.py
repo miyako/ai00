@@ -32,6 +32,13 @@ def verify_hash(path, expected):
         raise ValueError(f"{path}: expected SHA-256 {expected}, got {actual}")
 
 
+def checkout_source(source, pin):
+    source.parent.mkdir(parents=True, exist_ok=True)
+    run("git", "clone", "--config", "core.autocrlf=false", "--config", "core.eol=lf",
+        "--no-checkout", pin["repository"], str(source))
+    run("git", "checkout", "--detach", pin["commit"], cwd=source)
+
+
 def check_source(source, pin):
     actual = run("git", "rev-parse", "HEAD", cwd=source, capture=True).strip()
     if actual != pin["commit"]:
@@ -86,10 +93,7 @@ def main():
     output = (args.output or ROOT / "dist" / args.target).resolve()
     pin = json.loads((ROOT / "upstream.json").read_text(encoding="utf-8"))
     if not source.exists():
-        source.parent.mkdir(parents=True, exist_ok=True)
-        run("git", "clone", "--config", "core.autocrlf=false", "--no-checkout",
-            pin["repository"], str(source))
-        run("git", "checkout", "--detach", pin["commit"], cwd=source)
+        checkout_source(source, pin)
     run("git", "lfs", "pull", cwd=source)
     check_source(source, pin)
     env = os.environ.copy()

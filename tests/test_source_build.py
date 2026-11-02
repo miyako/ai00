@@ -114,6 +114,25 @@ class SourceBuildTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "SHA-256"):
                 build.check_source(self.source, self.pin)
 
+    def test_checkout_forces_lf_even_with_global_crlf_policy(self):
+        repository = self.root / "fixture"
+        repository.mkdir()
+        build.run("git", "init", "--quiet", str(repository))
+        (repository / ".gitattributes").write_bytes(b"* text=auto\n")
+        (repository / "Cargo.lock").write_bytes(b"first\nsecond\n")
+        build.run("git", "-c", "core.autocrlf=false", "add", ".", cwd=repository)
+        build.run("git", "-c", "user.name=Build Test", "-c", "user.email=build@example.invalid",
+                  "-c", "commit.gpgsign=false", "commit", "--quiet", "--no-verify",
+                  "-m", "fixture", cwd=repository)
+        commit = build.run("git", "rev-parse", "HEAD", cwd=repository, capture=True).strip()
+        checkout = self.root / "checkout"
+        global_config = self.root / "gitconfig"
+        global_config.write_text("[core]\n\teol = crlf\n", encoding="utf-8")
+        with patch.dict(os.environ, {"GIT_CONFIG_GLOBAL": str(global_config),
+                                   "GIT_CONFIG_NOSYSTEM": "1"}):
+            build.checkout_source(checkout, {"repository": str(repository), "commit": commit})
+        self.assertEqual((checkout / "Cargo.lock").read_bytes(), b"first\nsecond\n")
+
     def test_packaging_paths_both_consume_source_artifacts(self):
         workflow = (ROOT / ".github/workflows/publish.yml").read_text()
         self.assertEqual(workflow.count("needs: server"), 2)
