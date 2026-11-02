@@ -241,6 +241,17 @@ These are proposals, **not** changes included in the server build update:
 | Low | Pin the 4D component dependencies independently | `Project/Sources/dependencies.json` still requests `latest` for `event`, `workers`, and `tcp`; publishing records the resolved versions but future builds can resolve newer ones. |
 | Low | Automate upstream pin proposals with release/HEAD distinction | `upstream.json` centralizes the immutable revision and asset hashes; updates should be reviewed and all native jobs should pass before publishing. |
 
+## Documentation site
+
+The [documentation site](https://miyako.github.io/ai00/) adopts
+[local-inference-site-design v1.0.0](https://github.com/miyako/local-inference-site-design/blob/v1.0.0/SITE-DESIGN.md).
+The adopted version and tagged guideline URL are recorded in `_config.yml`;
+guideline upgrades are explicit, reviewed site changes, not runtime imports.
+The sidebar, favicon, and local-stack illustration use an unchanged copy of
+`Ai00/Resources/logo.png` at `assets/resource-logo.png`.
+The original overview and `guide.html` reference anchors remain available;
+`build.html` provides a focused source-build entry point.
+
 ## Attribution
 
 This 4D integration is MIT-licensed. Ai00 is developed by the

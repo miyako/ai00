@@ -9,7 +9,9 @@ baseurl: /ai00
 
 title: "Ai00"
 description: "Local RWKV inference on Mac and Windows, connected to your 4D application."
-logo: "/assets/ai00.png"
+logo: "/assets/resource-logo.png"
+site_design_version: "v1.0.0"
+site_design_url: "https://github.com/miyako/local-inference-site-design/blob/v1.0.0/SITE-DESIGN.md"
 show_downloads: true       # controls the download links in header
 github:
   is_user_page: true

@@ -13,13 +13,15 @@
     <a class="skip" href="#main">Skip to content</a>
     <aside class="sidebar">
       <a class="brand" href="{{ '/' | relative_url }}">
-        <img src="{{ site.logo | relative_url }}" alt="" width="44" height="44">
+        <img src="{{ site.logo | relative_url }}" alt="" width="42" height="42">
         <span>Ai00 <small>for 4D</small></span>
       </a>
       <p class="sidebar-caption">Local intelligence.<br>Your application.</p>
       <nav aria-label="Documentation">
         <span class="nav-label">Get started</span>
         <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}aria-current="page"{% endif %}>Overview</a>
+        <a href="{{ '/guide.html' | relative_url }}" {% if page.url == '/guide.html' %}aria-current="page"{% endif %}>Guide</a>
+        <a href="{{ '/build.html' | relative_url }}" {% if page.url == '/build.html' %}aria-current="page"{% endif %}>Build</a>
         <a href="{{ '/#requirements' | relative_url }}">Compatibility</a>
         <a href="{{ '/#quickstart' | relative_url }}">First request</a>
         <a href="{{ '/guide.html#install-the-4d-component' | relative_url }}">Installation</a>
@@ -36,13 +38,14 @@
         <span>Documentation <span aria-hidden="true">/</span> {{ page.nav_title | default: 'Overview' }}</span>
         <div><a href="https://github.com/miyako/ai00/releases">Releases</a><a href="https://github.com/miyako/ai00">GitHub &nearr;</a></div>
       </header>
-      <main id="main" class="{{ page.content_class }}">
+      <main id="main" class="{{ page.content_class }}" tabindex="-1">
         {{ content }}
-        <footer class="site-footer">
+      </main>
+      <footer class="site-footer">
           <span>Ai00 for 4D / <a href="https://github.com/miyako/ai00/blob/main/LICENSE">MIT integration</a></span>
           <span><a href="https://github.com/miyako/ai00">Source</a> &middot; <a href="{{ '/guide.html#attribution' | relative_url }}">Attribution &amp; licenses</a></span>
-        </footer>
-      </main>
+          <span><a href="{{ site.site_design_url }}">Site design {{ site.site_design_version }}</a></span>
+      </footer>
     </div>
     {% include footer-custom.html %}
   </body>
