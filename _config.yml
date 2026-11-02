@@ -18,6 +18,12 @@ github:
   is_project_page: false
 
 exclude:
+  - ".build"
+  - "dist"
+  - "scripts"
+  - "tests"
+  - "upstream.json"
+  - "Ai00"
   - "vendor"
   - "resources"
   - "LICENSE"

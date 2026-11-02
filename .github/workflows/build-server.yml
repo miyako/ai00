@@ -1,0 +1,50 @@
+name: Build server from source
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/build-server.yml'
+      - '.github/workflows/publish.yml'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'upstream.json'
+      - 'Ai00/**'
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            target: aarch64-apple-darwin
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test build tooling
+        run: python -m unittest discover -s tests -v
+      - name: Install pinned Rust
+        shell: bash
+        run: |
+          toolchain=$(python -c 'import json; print(json.load(open("upstream.json"))["rust_toolchain"])')
+          rustup toolchain install "$toolchain" --profile minimal --target "${{ matrix.target }}"
+      - name: Build and smoke-test CLI
+        run: python scripts/build-server.py --target ${{ matrix.target }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-${{ matrix.target }}
+          path: dist/${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/Ai00-X/ai00_server.git",
+  "tag": "v0.7.1",
+  "commit": "54ddbd6818499b11bfd0469d2ea59577d8076c92",
+  "commit_date": "2026-06-09",
+  "release_date": "2026-06-09",
+  "crate_version": "0.6.2",
+  "rust_toolchain": "1.91.0",
+  "cargo_lock_sha256": "d3f00fbf1bd0db47c51d2de9936bd85725d3aee98366b160adff066bf341e76e",
+  "web_ui_sha256": "a7ca3ef0dee4b122701714feac3998fd32930d97b098bee2fb457ed1ec7b7021",
+  "tokenizer_sha256": "d0240333485ed4e21265d76a1b053dd3837f56c6f86f3a11202c7452803a6ed0",
+  "features": "default (embed)"
+}

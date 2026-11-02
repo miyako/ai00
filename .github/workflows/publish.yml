@@ -8,7 +8,12 @@ on:
       - '*/Project/Sources/**/*.4dm'
       - '*/Project/Sources/*/*.4DForm'
       - '*/Project/Sources/*.4DCatalog'
-      - '*/Project/Resources/**'
+      - 'Ai00/Resources/**'
+      - '.github/workflows/publish.yml'
+      - '.github/workflows/build-server.yml'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'upstream.json'
   workflow_dispatch:
     inputs:
         use_self_hosted:
@@ -30,7 +35,13 @@ env:
   
 jobs:
 
+  server:
+    uses: ./.github/workflows/build-server.yml
+    permissions:
+      contents: read
+
   publish:
+    needs: server
     if: ${{ github.event.inputs.use_self_hosted != 'true' }}
     permissions: write-all
     runs-on: [macos-latest]
@@ -44,6 +55,16 @@ jobs:
 
       - name: checkout 
         uses: actions/checkout@v4
+
+      - name: Stage source-built server resources
+        uses: actions/download-artifact@v4
+        with:
+          pattern: server-*
+          path: Ai00/Resources
+          merge-multiple: true
+
+      - name: Verify all release targets are present
+        run: python3 scripts/verify-resources.py
 
       - name: set version
         id: version
@@ -111,6 +132,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
 
   publish-locally:
+    needs: server
     if: ${{ github.event.inputs.use_self_hosted == 'true' }}
     permissions: write-all
     runs-on: [self-hosted, macos]
@@ -124,6 +146,16 @@ jobs:
 
       - name: checkout 
         uses: actions/checkout@v4
+
+      - name: Stage source-built server resources
+        uses: actions/download-artifact@v4
+        with:
+          pattern: server-*
+          path: Ai00/Resources
+          merge-multiple: true
+
+      - name: Verify all release targets are present
+        run: python3 scripts/verify-resources.py
 
       - name: set version
         id: version
