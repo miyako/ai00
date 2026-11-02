@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Integration and build guide
-nav_title: Integration & build
+nav_title: Guide
 content_class: guide
 ---
 

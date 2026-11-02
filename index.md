@@ -7,19 +7,27 @@ nav_title: Overview
 <section class="hero">
   <div class="hero-copy">
     <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Local inference / 4D integration</p>
-    <h1>Constant memory,<br><span>endless context.</span></h1>
+    <h1>Local RWKV.<br><span>Connected to 4D.</span></h1>
     <p class="lede">Bring RWKV language models into your application. Run locally on Mac or Windows, with a 4D component that handles the server lifecycle.</p>
     <div class="actions">
       <a class="button primary" href="#quickstart">Make your first request <span aria-hidden="true">&rarr;</span></a>
       <a class="button" href="{{ '/guide.html#install-the-4d-component' | relative_url }}">Get the component</a>
     </div>
   </div>
-  <div class="hero-art">
-    <img src="{{ site.logo | relative_url }}" alt="Ai00 wrapper icon: a violet raven on a dark rounded square" width="240" height="240">
-    <span>RWKV. Right where you work.</span>
+  <div class="stack-panel" role="group" aria-label="Local inference stack: 4D connects to Ai00 over loopback HTTP; Ai00 loads RWKV Safetensors weights">
+    <div class="stack-header"><span class="eyebrow">The local stack</span><span class="stack-tag">On your machine</span></div>
+    <div class="stack-row"><span class="app-mark" aria-hidden="true">4D</span><div><strong>Your application</strong><span>4D 20+ component</span></div></div>
+    <div class="stack-connector">HTTP · 127.0.0.1:8080<br>/api/oai/v1</div>
+    <div class="stack-engine">
+      <img src="{{ site.logo | relative_url }}" alt="" width="52" height="52">
+      <div><strong>Ai00</strong><span>RWKV inference / WebGPU</span></div>
+    </div>
+    <div class="stack-connector">loads</div>
+    <div class="stack-row"><span class="model-mark" aria-hidden="true">.st</span><div><strong>RWKV model weights</strong><span>Safetensors · downloaded separately</span></div></div>
+    <div class="stack-footer"><span>Models · Chat · Text completions</span><span>GPU backend required; no CUDA or Python for inference.</span></div>
   </div>
+  <div class="platform-strip"><span>Apple Silicon</span><span>Intel Mac</span><span>Windows x64</span><span>4D 20+</span></div>
 </section>
-<div class="platform-strip"><span>Apple Silicon</span><span>Intel Mac</span><span>Windows x64</span><span>4D 20+</span></div>
 
 <section aria-labelledby="paths-title">
   <p class="eyebrow">Two ways in</p>
@@ -31,7 +39,7 @@ nav_title: Overview
       <p>Start the server, resolve a model, and manage its process from 4D. Talk to it over a local HTTP API.</p>
       <span class="card-link">Integrate with 4D &rarr;</span>
     </a>
-    <a class="card" href="{{ '/guide.html#build-the-server-from-source' | relative_url }}">
+    <a class="card" href="{{ '/build.html' | relative_url }}">
       <span class="card-number">02 / Native server</span>
       <h3>Take the direct route <span aria-hidden="true">&nearr;</span></h3>
       <p>Build the pinned upstream source for your machine, configure a compatible model, and use your own HTTP client.</p>
