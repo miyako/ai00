@@ -111,7 +111,9 @@ Apple Silicon macOS, Intel macOS and Windows x64 runners. It uploads
 distributions. Each contains the Resources overlay described above.
 
 Both hosted and self-hosted **Publish** paths depend on those builds,
-download/merge all three overlays into `Ai00/Resources`, and verify their
+set the package version on a clean checkout before staging generated files
+(`npm version` requires a clean working tree), then download/merge all three
+overlays into `Ai00/Resources` and verify their
 provenance and file checksums before invoking the existing tool4d component
 build, Apple signing/notarization and release actions. They also explicitly
 restore the existing declared `event`, `workers`, and `tcp` dependencies
