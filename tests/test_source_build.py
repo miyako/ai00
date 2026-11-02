@@ -146,6 +146,21 @@ class SourceBuildTests(unittest.TestCase):
     def test_pages_uses_readme(self):
         self.assertIn("{% include_relative README.md %}", (ROOT / "index.md").read_text())
 
+    def test_publish_versions_clean_checkout_before_staging_resources(self):
+        workflow = (ROOT / ".github/workflows/publish.yml").read_text()
+        for job in ("publish", "publish-locally"):
+            with self.subTest(job=job):
+                steps = workflow.split(f"\n  {job}:\n", 1)[1].split("\n  publish-locally:\n", 1)[0]
+                checkout = steps.index("uses: actions/checkout@v4")
+                version = steps.index("uses: miyako/4D/.github/actions/package-set-version@v1")
+                staging = steps.index("uses: actions/download-artifact@v4")
+                restore = steps.index("run: python3 scripts/restore-components.py")
+                build_step = steps.index("uses: miyako/4D/.github/actions/build-component@v1")
+                self.assertLess(checkout, version)
+                self.assertLess(version, staging)
+                self.assertLess(staging, restore)
+                self.assertLess(restore, build_step)
+
     def test_invalid_component_namespace_rejected(self):
         project = self.root / "project"
         manifest = project / "Project/Sources/dependencies.json"

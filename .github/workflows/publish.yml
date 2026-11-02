@@ -56,6 +56,12 @@ jobs:
       - name: checkout 
         uses: actions/checkout@v4
 
+      - name: set version
+        id: version
+        uses: miyako/4D/.github/actions/package-set-version@v1
+        with:
+          mode: ${{ steps.configure.outputs.mode }}
+
       - name: Stage source-built server resources
         uses: actions/download-artifact@v4
         with:
@@ -70,12 +76,6 @@ jobs:
         run: python3 scripts/restore-components.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: set version
-        id: version
-        uses: miyako/4D/.github/actions/package-set-version@v1
-        with:
-          mode: ${{ steps.configure.outputs.mode }}
 
       - name: get tool version
         id: tool
@@ -159,6 +159,12 @@ jobs:
       - name: checkout 
         uses: actions/checkout@v4
 
+      - name: set version
+        id: version
+        uses: miyako/4D/.github/actions/package-set-version@v1
+        with:
+          mode: ${{ steps.configure.outputs.mode }}
+
       - name: Stage source-built server resources
         uses: actions/download-artifact@v4
         with:
@@ -173,12 +179,6 @@ jobs:
         run: python3 scripts/restore-components.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: set version
-        id: version
-        uses: miyako/4D/.github/actions/package-set-version@v1
-        with:
-          mode: ${{ steps.configure.outputs.mode }}
 
       - name: get tool version
         id: tool
