@@ -66,6 +66,11 @@ jobs:
       - name: Verify all release targets are present
         run: python3 scripts/verify-resources.py
 
+      - name: Restore declared 4D compiler dependencies
+        run: python3 scripts/restore-components.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: set version
         id: version
         uses: miyako/4D/.github/actions/package-set-version@v1
@@ -93,6 +98,13 @@ jobs:
           project_path: ${{ steps.configure.outputs.project_path }}
           pack_project: 'true'
           use_standard_zip: 'true'
+
+      - name: Verify compiled component and packaged server resources
+        run: |
+          test -s "$PRODUCT_PATH/Ai00.4DZ"
+          python3 scripts/verify-resources.py --resources "$PRODUCT_PATH/Resources"
+        env:
+          PRODUCT_PATH: ${{ steps.build.outputs.product_path }}
 
       - name: setup keychain 
         id: keychain
@@ -157,6 +169,11 @@ jobs:
       - name: Verify all release targets are present
         run: python3 scripts/verify-resources.py
 
+      - name: Restore declared 4D compiler dependencies
+        run: python3 scripts/restore-components.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: set version
         id: version
         uses: miyako/4D/.github/actions/package-set-version@v1
@@ -184,6 +201,13 @@ jobs:
           project_path: ${{ steps.configure.outputs.project_path }}
           pack_project: 'true'
           use_standard_zip: 'true'
+
+      - name: Verify compiled component and packaged server resources
+        run: |
+          test -s "$PRODUCT_PATH/Ai00.4DZ"
+          python3 scripts/verify-resources.py --resources "$PRODUCT_PATH/Resources"
+        env:
+          PRODUCT_PATH: ${{ steps.build.outputs.product_path }}
 
       - name: setup keychain 
         id: keychain

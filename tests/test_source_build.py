@@ -21,6 +21,7 @@ def load_script(name):
 
 build = load_script("build-server")
 verify = load_script("verify-resources")
+components = load_script("restore-components")
 
 
 class SourceBuildTests(unittest.TestCase):
@@ -138,9 +139,34 @@ class SourceBuildTests(unittest.TestCase):
         self.assertEqual(workflow.count("needs: server"), 2)
         self.assertEqual(workflow.count("pattern: server-*"), 2)
         self.assertEqual(workflow.count("run: python3 scripts/verify-resources.py"), 2)
+        self.assertEqual(workflow.count("run: python3 scripts/restore-components.py"), 2)
+        self.assertEqual(workflow.count('test -s "$PRODUCT_PATH/Ai00.4DZ"'), 2)
+        self.assertEqual(workflow.count('--resources "$PRODUCT_PATH/Resources"'), 2)
 
     def test_pages_uses_readme(self):
         self.assertIn("{% include_relative README.md %}", (ROOT / "index.md").read_text())
+
+    def test_invalid_component_namespace_rejected(self):
+        project = self.root / "project"
+        manifest = project / "Project/Sources/dependencies.json"
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(json.dumps({"dependencies": {
+            "../escape": {"github": "miyako/event", "version": "latest"}
+        }}))
+        with self.assertRaisesRegex(ValueError, "Invalid component namespace"):
+            components.restore(project)
+
+    def test_missing_compiled_dependency_rejected(self):
+        project = self.root / "project"
+        manifest = project / "Project/Sources/dependencies.json"
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(json.dumps({"dependencies": {
+            "event": {"github": "miyako/event", "version": "latest"}
+        }}))
+        with patch.object(components.subprocess, "check_output", return_value="20.0.19\n"), \
+                patch.object(components.subprocess, "run"):
+            with self.assertRaisesRegex(ValueError, "missing compiled"):
+                components.restore(project)
 
 
 if __name__ == "__main__":

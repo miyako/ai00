@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Reject incomplete or stale server resources before component packaging."""
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -45,8 +46,11 @@ def verify(resources, pin):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--resources", type=Path, default=ROOT / "Ai00/Resources")
+    args = parser.parse_args()
     try:
-        verify(ROOT / "Ai00/Resources",
+        verify(args.resources.resolve(),
                json.loads((ROOT / "upstream.json").read_text(encoding="utf-8")))
     except (OSError, ValueError, KeyError) as error:
         print(f"Cannot package component: {error}", file=sys.stderr)
