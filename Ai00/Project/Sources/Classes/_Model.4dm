@@ -12,6 +12,7 @@ property decodeData : Boolean
 property range : Object
 property bufferSize : Integer
 property event : cs:C1710.event.event
+property _failed : Boolean
 
 Class constructor($port : Integer; $file : 4D:C1709.File; $URL : Text; $options : Object; $formula : 4D:C1709.Function; $event : cs:C1710.event.event)
 	
@@ -39,10 +40,13 @@ Class constructor($port : Integer; $file : 4D:C1709.File; $URL : Text; $options 
 	Case of 
 		: (OB Instance of:C1731($file; 4D:C1709.File))
 			If (Not:C34(This:C1470.file.exists))
-				If (This:C1470.file.parent#Null:C1517)
-					This:C1470.file.parent.create()
-					This:C1470.head()
-				End if 
+				Case of 
+					: (This:C1470.URL="")
+						This:C1470._fail("model file not found and no URL to download from: "+This:C1470.file.path)
+					: (This:C1470.file.parent#Null:C1517)
+						This:C1470.file.parent.create()
+						This:C1470.head()
+				End case 
 			Else 
 				This:C1470.start()
 			End if 
@@ -87,7 +91,7 @@ Function head()
 		End if 
 		4D:C1709.HTTPRequest.new(This:C1470.URL; This:C1470)
 	Else 
-		This:C1470._onResponse.call(This:C1470; {success: False:C215}; This:C1470.options)
+		This:C1470._fail(This:C1470._downloadError($request))
 	End if 
 	
 Function start()
@@ -124,6 +128,8 @@ Function onResponse($request : 4D:C1709.HTTPRequest; $event : Object)
 					This:C1470.event.onResponse.call(This:C1470; $request; $event)
 				End if 
 				This:C1470.start()
+			Else 
+				This:C1470._fail(This:C1470._downloadError($request))
 			End if 
 		Else   //range get
 			If ([200; 206].includes($request.response.status))
@@ -142,14 +148,36 @@ Function onResponse($request : 4D:C1709.HTTPRequest; $event : Object)
 					End if 
 					This:C1470.start()
 				End if 
+			Else 
+				This:C1470._fail(This:C1470._downloadError($request))
 			End if 
 			
 	End case 
 	
-Function onError($request : 4D:C1709.HTTPRequest; $event : Object)
+Function _downloadError($request : 4D:C1709.HTTPRequest) : Text
 	
-	If (Value type:C1509(This:C1470._onResponse)=Is object:K8:27) && (OB Instance of:C1731(This:C1470._onResponse; 4D:C1709.Function))
-		This:C1470._onResponse.call(This:C1470; {success: False:C215}; This:C1470.options)
-		This:C1470._fileHandle:=Null:C1517
+	If (Num:C11($request.response.status)=0)
+		return "failed to download model: "+This:C1470.URL
+	End if 
+	return "failed to download model: HTTP "+String:C10($request.response.status)+" "+This:C1470.URL
+	
+Function _fail($message : Text)
+	
+	//report once: a network error can reach both head() and onError()
+	If (This:C1470._failed)
+		return 
+	End if 
+	This:C1470._failed:=True:C214
+	
+	This:C1470._fileHandle:=Null:C1517
+	If (Bool:C1537(This:C1470.file.exists))
 		This:C1470.file.delete()
 	End if 
+	
+	If (Value type:C1509(This:C1470._onResponse)=Is object:K8:27) && (OB Instance of:C1731(This:C1470._onResponse; 4D:C1709.Function))
+		This:C1470._onResponse.call(This:C1470; {success: False:C215; message: $message}; This:C1470.options)
+	End if 
+	
+Function onError($request : 4D:C1709.HTTPRequest; $event : Object)
+	
+	This:C1470._fail(This:C1470._downloadError($request))
