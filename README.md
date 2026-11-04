@@ -175,6 +175,13 @@ it does not choose a CPU RWKV backend. The wrapper's `onSuccess` callback
 currently means the model file is available and the worker was started,
 **not** that GPU/model loading or inference succeeded.
 
+`event` is optional: with `Null` (as in `cs.Ai00.Ai00.new()`), the server
+still starts but no callbacks are delivered. Server stdout/stderr are
+intentionally not forwarded to `onStdOut`/`onStdErr`, because a long-running
+server can produce a large amount of output. Real-number options passed as
+command-line arguments always use `.` as the decimal separator (for example
+`0.3`, or `1E-05` for very small values), whatever the system locale.
+
 Use the port you selected (8080 for the default constructor):
 
 ```sh
@@ -195,6 +202,10 @@ var $Ai00 : cs.Ai00.Ai00
 $Ai00:=cs.Ai00.Ai00.new()
 $Ai00.terminate()
 ```
+
+`new()` with no arguments is not just a handle. If nothing is listening on
+port 8080, it starts the default model, downloading it first if it is missing.
+That startup runs asynchronously, so it can finish after `terminate()` returns.
 
 ### Standalone CLI and models
 
@@ -236,7 +247,7 @@ These are proposals, **not** changes included in the server build update:
 | High | Poll model readiness before `onSuccess`, and report failed loads | `_Model.4dm` `start()` calls `onSuccess` immediately after worker start; upstream `main.rs` queues model loading asynchronously. A model-less local smoke test served API docs but `/api/oai/v1/models` timed out. |
 | High | Make downloads atomic and validate HTTP ranges/checksums | `_Model.4dm` writes directly to the final model file, trusts any existing file, and accepts both 200 and 206 for range requests without checking `Content-Range`. An interrupted download can be mistaken for a model. |
 | Medium | Expose real quantization and GPU selection options | `_Config.4dm` getters hard-code `quant = 0` and `manual = 0`; `_server.4dm` consumes `quant` without applying it. `quant_type` cannot activate quantization. |
-| Medium | Forward stderr/worker errors to the supplied callbacks | `_Model.4dm` stores `onStdErr`/`onStdOut`, but `_server.4dm` binds only `onTerminate`; `_CLI_Controller.4dm`'s default error/data handlers do nothing. |
+| Medium | Report worker start/launch errors to the supplied callbacks | `_Model.4dm` stores `onStdErr`/`onStdOut`, but `_server.4dm` binds only `onTerminate`; `_CLI_Controller.4dm`'s default error/data handlers do nothing. Keeping stdout/stderr unforwarded is intentional, because long-running servers produce large output. Any error reporting should not forward the raw streams. |
 | Medium | Reproducibly rebuild the converter separately | Upstream root `Cargo.toml` omits `crates/converter` from workspace members; the bundled converter binaries have no recorded revision. |
 | Low | Pin the 4D component dependencies independently | `Project/Sources/dependencies.json` still requests `latest` for `event`, `workers`, and `tcp`; publishing records the resolved versions but future builds can resolve newer ones. |
 | Low | Automate upstream pin proposals with release/HEAD distinction | `upstream.json` centralizes the immutable revision and asset hashes; updates should be reviewed and all native jobs should pass before publishing. |
